@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Alunos - Faculdade</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Ícone da aba do navegador -->
+  <link rel="stylesheet" href="style-cadastro.css"> <!-- Estilos para a página -->
+</head>
+<body>
+  <header class="header">
+    <h1>Cadastro de Alunos - Faculdade</h1> <!-- Título principal -->
+  </header>
+
+  <div class="container">
+    <div class="dashboard">
+      <!-- Card para o formulário de cadastro de alunos -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Cadastrar Novo Aluno</h2>
+        </div>
+        <form id="studentForm" class="student-form">
+          <div class="input-group">
+            <label for="studentName">Nome Completo</label>
+            <input type="text" id="studentName" required> <!-- Campo para nome -->
+          </div>
+          <div class="input-group">
+            <label for="course">Curso</label>
+            <input type="text" id="course" required> <!-- Campo para curso -->
+          </div>
+          <div class="input-group">
+            <label for="semester">Semestre</label>
+            <select id="semester" required> <!-- Seleção do semestre -->
+              <option value="">Selecione o semestre</option>
+              <option value="1">1º Semestre</option>
+              <option value="2">2º Semestre</option>
+              <option value="3">3º Semestre</option>
+              <option value="4">4º Semestre</option>
+              <option value="5">5º Semestre</option>
+              <option value="6">6º Semestre</option>
+              <option value="7">7º Semestre</option>
+              <option value="8">8º Semestre</option>
+              <option value="9">9º Semestre</option>
+              <option value="10">10º Semestre</option>
+              <option value="11">11º Semestre</option>
+              <option value="12">12º Semestre</option>
+            </select>
+          </div>
+          <button type="submit">Cadastrar</button> <!-- Botão para cadastrar -->
+        </form>
+      </div>
+
+      <!-- Card para exibir estatísticas -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Estatísticas</h2>
+        </div>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-number" id="totalStudents">0</div>
+            <div>Total de Alunos</div> <!-- Exibição do total de alunos -->
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="activeCourses">0</div>
+            <div>Cursos Ativos</div> <!-- Exibição dos cursos ativos -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Card para listar alunos cadastrados -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Alunos Cadastrados</h2>
+        </div>
+        <div class="students-list" id="studentsList"></div> <!-- Lista de alunos cadastrados -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script-cadastro.js"></script> <!-- Inclusão do script JavaScript -->
+</body>
+</html>

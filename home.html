@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Controle de Acesso - Faculdade</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link para o CSS -->
+</head>
+<body>
+
+<header class="header">
+  <h1>Sistema de Controle de Acesso - Faculdade</h1> <!-- Título do sistema -->
+</header>
+
+<div class="container">
+  <div class="dashboard">
+    <div class="card">
+      <div class="card-header">
+        <h2>Registrar Acesso</h2> <!-- Seção para registrar acesso -->
+      </div>
+      <form id="accessForm" class="access-form" method="POST" action="">
+        <div class="input-group">
+          <input type="text" name="matricula" id="studentId" placeholder="Matrícula" required> <!-- Campo para matrícula -->
+        </div>
+        <div class="input-group">
+          <select name="tipo_acesso" id="accessType" required> <!-- Seleção do tipo de acesso -->
+            <option value="">Tipo de Acesso</option>
+            <option value="entrada">Entrada</option> <!-- Opção de entrada -->
+            <option value="saida">Saída</option> <!-- Opção de saída -->
+          </select>
+        </div>
+        <button type="submit">Registrar</button> <!-- Botão para registrar o acesso -->
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Estatísticas do Dia</h2> <!-- Seção para exibir estatísticas do dia -->
+      </div>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="presentCount">0</div> <!-- Total de presentes -->
+          <div>Presentes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalEntries">0</div> <!-- Total de entradas -->
+          <div>Entradas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalExits">0</div> <!-- Total de saídas -->
+          <div>Saídas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Registro de Acessos</h2> <!-- Seção para mostrar o registro de acessos -->
+      </div>
+      <div class="access-log" id="accessLog"></div> <!-- Log de acessos -->
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script> <!-- Script JavaScript -->
+</body>
+</html>
