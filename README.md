@@ -1,5 +1,4 @@
 # Controle-de-Acesso-Faculdade
-# Sistema de Controle de Acesso - Faculdade
 
 ## Descrição
 
