@@ -61,6 +61,7 @@ Sistema web desenvolvido para gerenciar o controle de acesso de alunos em ambien
    - XAMPP instalado
    - MySQL configurado
    - PHP 7.4 ou superior
+   - Composer instalado
 
 2. **Configuração:**
    ```bash
