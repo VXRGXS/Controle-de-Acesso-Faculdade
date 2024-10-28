@@ -50,6 +50,7 @@ Sistema web desenvolvido para gerenciar o controle de acesso de alunos em ambien
 ├── 📄 index.php
 ├── 📄 home.html
 ├── 📄 README.md
+├── router.php
 └── setup.php
 
 ```
@@ -73,14 +74,14 @@ Sistema web desenvolvido para gerenciar o controle de acesso de alunos em ambien
    php .\setup.php
 
    # Ative o servidor
-   php -S 127.0.0.1:8000
+   php -S 127.0.0.1:8000 router.php
    
    ```
 
 3. **Execução:**
    - Inicie o XAMPP (Apache e MySQL)
    - Acesse `http://127.0.0.1:8000/cadastro.html` para cadastrar o aluno
-   - Acesse `http://127.0.0.1:8000/home.html` para resgistrar sua entrada
+   - Acesse `http://127.0.0.1:8000/home.html` para controlar o acesso do aluno
 
 ## 👥 Autor
 João Victor Santos Vargas da Silva - https://github.com/VXRGXS
