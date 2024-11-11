@@ -13,6 +13,20 @@ $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbName");
 // Seleciona a base de dados
 $pdo->exec("USE $dbName");
 
+
+// Criação da tabela de auth
+$queryAuth="
+CREATE TABLE IF NOT EXISTS auth (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    nivel_acesso ENUM('admin', 'user') NOT NULL
+)";
+
+$stmtAuth= $pdo->prepare($queryAuth);
+$stmtAuth->execute();
+
 // Criação da tabela de alunos
 $queryAlunos = "
 CREATE TABLE IF NOT EXISTS alunos (
