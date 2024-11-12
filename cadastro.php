@@ -1,4 +1,6 @@
 <?php
+include 'verifica-acesso.php'; 
+
 // Conexão com o banco de dados utilizando PDO
 $pdo = new PDO("mysql:host=127.0.0.1;dbname=uniban", "root", "");
 

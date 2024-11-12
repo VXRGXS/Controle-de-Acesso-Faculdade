@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['user'])) {
+    // Se não estiver logado, redireciona para a página de login
+    header("Location: auth.html");
+    exit;
+}
+
+// Acessa as informações do usuário logado
+$user = $_SESSION['user'];
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -60,7 +74,10 @@
       <div class="access-log" id="accessLog"></div> <!-- Log de acessos -->
     </div>
   </div>
-  <button onclick="window.location.href='cadastro.html'" class="back-button">Voltar para Cadastro</button>
+  <!-- Verifica se o usuário é admin e exibe o botão para voltar ao cadastro -->
+  <?php if ($user['nivel_acesso'] === 'admin'): ?>
+      <button onclick="window.location.href='cadastro.html'" class="back-button">Voltar para Cadastro</button>
+  <?php endif; ?>
 </div>
 
 <script src="js/script.js"></script> <!-- Script JavaScript -->

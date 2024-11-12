@@ -1,97 +1,103 @@
 // Classe responsável pelo controle de acesso dos alunos
 class AccessControl {
     constructor() {
-        this.accessLog = []; // Array para armazenar o registro de acessos
-        this.presentStudents = new Set(); // Conjunto para armazenar alunos presentes
-        this.totalEntries = 0; // Contador total de entradas
-        this.totalExits = 0; // Contador total de saídas
+        this.accessLog = [];
+        this.totalEntries = 0;
+        this.totalExits = 0;
+        this.totalPresentes = 0;
 
-        this.initializeEventListeners(); // Inicializa os ouvintes de eventos
-        this.updateStats(); // Atualiza as estatísticas na interface
+        this.fetchDailyStats();
+        this.initializeEventListeners();
+    }
+
+    // Busca as estatísticas do banco de dados
+    fetchDailyStats() {
+        fetch('listar_acessos.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar estatísticas: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Atualiza os contadores com os dados do banco de dados
+                this.totalEntries = data.entradas;
+                this.totalExits = data.saidas;
+                this.totalPresentes = data.presentes;
+                this.updateStats(); // Atualiza a interface com os dados recebidos
+            })
+            .catch(error => console.error('Erro ao buscar estatísticas:', error));
     }
 
     // Inicializa os ouvintes de eventos para o formulário de acesso
     initializeEventListeners() {
         document.getElementById('accessForm').addEventListener('submit', (e) => {
-            e.preventDefault(); // Prevê o envio padrão do formulário
-            this.handleAccess(); // Chama o método para lidar com o acesso
+            e.preventDefault();
+            this.handleAccess();
         });
     }
 
     // Lida com o registro de acesso
     handleAccess() {
-        const studentId = document.getElementById('studentId').value.trim(); // Captura a matrícula do aluno
-        const accessType = document.getElementById('accessType').value.trim(); // Captura o tipo de acesso
+        const studentId = document.getElementById('studentId').value.trim();
+        const accessType = document.getElementById('accessType').value.trim();
 
-        // Validação dos campos
         if (!studentId || !accessType) {
-            alert('Por favor, preencha todos os campos.'); // Mensagem de erro se campos estiverem vazios
+            alert('Por favor, preencha todos os campos.');
             return;
         }
 
-        // Validação para saída sem entrada registrada
-        if (accessType === 'saida' && !this.presentStudents.has(studentId)) {
-            alert(`O estudante ${studentId} não pode sair porque não registrou entrada.`); // Mensagem de erro
+        if (accessType === 'saida' && !this.accessLog.some(log => log.studentId === studentId && log.accessType === 'entrada')) {
+            alert(`O estudante ${studentId} não pode sair porque não registrou entrada.`);
             return;
         }
 
-        // Criação dos dados do formulário
         const formData = new URLSearchParams();
         formData.append('matricula', studentId);
         formData.append('tipo_acesso', accessType);
 
-        // Envio dos dados para o servidor
         fetch('index.php', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: formData.toString() // Dados do formulário convertidos para string
+            body: formData.toString()
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro na rede ou servidor: ' + response.statusText);
-            }
-            return response.json(); // Retorna a resposta em formato JSON
-        })
+        .then(response => response.json())
         .then(data => {
-            this.processServerResponse(data, studentId, accessType); // Processa a resposta do servidor
+            this.processServerResponse(data, studentId, accessType);
         })
         .catch(error => {
-            console.error('Erro na requisição:', error); // Log de erro no console
-            alert('Erro ao registrar acesso: ' + error.message); // Mensagem de erro ao usuário
+            console.error('Erro na requisição:', error);
+            alert('Erro ao registrar acesso: ' + error.message);
         });
     }
 
     // Processa a resposta do servidor
     processServerResponse(data, studentId, accessType) {
         if (data.status === 'sucesso') {
-            // Atualiza o estado conforme o tipo de acesso
             if (accessType === 'entrada') {
-                this.presentStudents.add(studentId); // Adiciona o aluno ao conjunto de presentes
-                this.totalEntries++; // Incrementa o contador de entradas
-                data.mensagem = 'Entrada registrada com sucesso!'; // Mensagem de sucesso
+                this.totalEntries++;
+                this.totalPresentes++;
             } else if (accessType === 'saida') {
-                this.presentStudents.delete(studentId); // Remove o aluno do conjunto de presentes
-                this.totalExits++; // Incrementa o contador de saídas
-                data.mensagem = 'Saída registrada com sucesso!'; // Mensagem de sucesso
+                this.totalExits++;
+                this.totalPresentes--;
             }
 
-            // Adiciona o registro de acesso ao log
             this.accessLog.unshift({
                 studentId,
                 accessType,
-                timestamp: new Date() // Marca o timestamp da entrada ou saída
+                timestamp: new Date()
             });
-            
-            this.updateLog(); // Atualiza a visualização do log
-            this.updateStats(); // Atualiza as estatísticas na interface
-            this.resetForm(); // Reseta o formulário
-            
-            alert(data.mensagem); // Exibe a mensagem de sucesso ao usuário
+
+            this.updateLog();
+            this.updateStats();
+            this.resetForm();
+
+            alert(data.mensagem);
         } else {
-            alert(data.mensagem); // Mensagem de erro caso a operação falhe
+            alert(data.mensagem);
         }
     }
 
@@ -106,27 +112,27 @@ class AccessControl {
                 </span>
                 <span>${entry.accessType.toUpperCase()} - ${this.formatTime(entry.timestamp)}</span>
             </div>
-        `).join(''); // Monta a visualização do log
+        `).join('');
     }
 
     // Atualiza as estatísticas na interface
     updateStats() {
-        document.getElementById('presentCount').textContent = this.presentStudents.size; // Total de alunos presentes
-        document.getElementById('totalEntries').textContent = this.totalEntries; // Total de entradas
-        document.getElementById('totalExits').textContent = this.totalExits; // Total de saídas
+        document.getElementById('presentCount').textContent = this.totalPresentes;
+        document.getElementById('totalEntries').textContent = this.totalEntries;
+        document.getElementById('totalExits').textContent = this.totalExits;
     }
 
     // Reseta o formulário de entrada
     resetForm() {
-        document.getElementById('studentId').value = ''; // Limpa o campo da matrícula
-        document.getElementById('accessType').value = ''; // Limpa o campo do tipo de acesso
+        document.getElementById('studentId').value = '';
+        document.getElementById('accessType').value = '';
     }
 
     // Formata a hora para visualização
     formatTime(date) {
         return date.toLocaleTimeString('pt-BR', {
             hour: '2-digit',
-            minute: '2-digit' // Formato de hora e minuto
+            minute: '2-digit'
         });
     }
 }

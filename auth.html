@@ -1,57 +1,69 @@
-<html><head><base href="/"><!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
     <meta charset="UTF-8">
     <title>Login - Sistema de Controle de Acesso</title>
-    <link rel="stylesheet" href="css/style-auth.css"> <!-- Estilos para a página -->
-    </head>
-    <body>
-    
+    <link rel="stylesheet" href="css/style-auth.css">
+</head>
+<body>
     <header class="header">
-      <h1>Sistema de Controle de Acesso</h1>
+        <h1>Sistema de Controle de Acesso</h1>
     </header>
-    
+
     <div class="auth-container">
-      <div class="auth-tabs">
-        <div class="tab active" onclick="switchTab('login')">Login</div>
-        <div class="tab" onclick="switchTab('register')">Cadastro</div>
-      </div>
-    
-      <form id="loginForm" class="auth-form" action="cadastro-auth.php" method="post">
-        <div class="form-group">
-          <label for="loginEmail">E-mail</label>
-          <input type="email" id="loginEmail" required>
+        <div class="auth-tabs">
+            <div class="tab active" onclick="switchTab('login')">Login</div>
+            <div class="tab" onclick="switchTab('register')">Cadastro</div>
         </div>
-        <div class="form-group">
-          <label for="loginPassword">Senha</label>
-          <input type="password" id="loginPassword" required>
-        </div>
-        <button type="submit" class="btn">Entrar</button>
-        <div id="loginError" class="error-message">Credenciais inválidas</div>
-      </form>
-    
-      <form id="registerForm" class="auth-form" action="cadastro-auth.php" method="post" style="display: none;">
-        <div class="form-group">
-          <label for="registerName">Nome Completo</label>
-          <input type="text" id="registerName" required>
-        </div>
-        <div class="form-group">
-          <label for="registerEmail">E-mail</label>
-          <input type="email" id="registerEmail" required>
-        </div>
-        <div class="form-group">
-          <label for="registerPassword">Senha</label>
-          <input type="password" id="registerPassword" required>
-        </div>
-        <div class="form-group">
-          <label for="userRole">Nível de Acesso</label>
-          <select id="userRole" required>
-            <option value="">Selecione o nível</option>
-            <option value="admin">Administração</option>
-            <option value="user">Portaria</option>
-          </select>
-        </div>
-        <button type="submit" class="btn">Cadastrar</button>
-        <div id="registerError" class="error-message">Erro no cadastro</div>
-      </form>
-    </div>   
-    <script src="js/script-auth.js"></script> <!-- Inclusão do script JavaScript -->
- </body></html>
+
+        <!-- Formulário de Login -->
+        <form id="loginForm" class="auth-form" action="cadastro-auth.php" method="post">
+            <input type="hidden" name="action" value="login"> <!-- Ação para login -->
+            <div class="form-group">
+                <label for="loginEmail">E-mail</label>
+                <input type="email" id="loginEmail" name="loginEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Senha</label>
+                <input type="password" id="loginPassword" name="loginPassword" required>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+            <div id="loginError" class="error-message">Credenciais inválidas</div>
+        </form>
+
+        <!-- Formulário de Cadastro -->
+        <form id="registerForm" class="auth-form" action="cadastro-auth.php" method="post" style="display: none;">
+            <input type="hidden" name="action" value="register"> <!-- Ação para cadastro -->
+            <div class="form-group">
+                <label for="registerName">Nome Completo</label>
+                <input type="text" id="registerName" name="registerName" required>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">E-mail</label>
+                <input type="email" id="registerEmail" name="registerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Senha</label>
+                <input type="password" id="registerPassword" name="registerPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="userRole">Nível de Acesso</label>
+                <select id="userRole" name="userRole" required>
+                    <option value="">Selecione o nível</option>
+                    <option value="admin">Administração</option>
+                    <option value="user">Portaria</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Cadastrar</button>
+            <div id="registerError" class="error-message">Erro no cadastro</div>
+        </form>
+
+        <!-- Mensagem de Sucesso após Cadastro -->
+        <?php if (isset($_GET['cadastro']) && $_GET['cadastro'] === 'sucesso'): ?>
+            <div class="success-message">Cadastro realizado com sucesso! Agora, faça login.</div>
+        <?php endif; ?>
+    </div>
+
+    <script src="js/script-auth.js"></script>
+</body>
+</html>

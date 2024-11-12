@@ -68,13 +68,3 @@ class AuthSystem {
       tabs[1].classList.add('active');
     }
   }
-  
-  const authSystem = new AuthSystem();
-  
-  // Add sample user for testing
-  authSystem.users.push({
-    name: 'Admin',
-    email: 'admin@faculdade.com',
-    password: 'admin123',
-    role: 'admin'
-  });
