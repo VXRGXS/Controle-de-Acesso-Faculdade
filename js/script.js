@@ -41,21 +41,16 @@ class AccessControl {
     handleAccess() {
         const studentId = document.getElementById('studentId').value.trim();
         const accessType = document.getElementById('accessType').value.trim();
-
+    
         if (!studentId || !accessType) {
             alert('Por favor, preencha todos os campos.');
             return;
         }
-
-        if (accessType === 'saida' && !this.accessLog.some(log => log.studentId === studentId && log.accessType === 'entrada')) {
-            alert(`O estudante ${studentId} não pode sair porque não registrou entrada.`);
-            return;
-        }
-
+    
         const formData = new URLSearchParams();
         formData.append('matricula', studentId);
         formData.append('tipo_acesso', accessType);
-
+    
         fetch('index.php', { 
             method: 'POST',
             headers: {
@@ -64,15 +59,24 @@ class AccessControl {
             },
             body: formData.toString()
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
-            this.processServerResponse(data, studentId, accessType);
+            alert(data.mensagem); // Exibe a mensagem do servidor
+            if (data.status === 'sucesso') {
+                this.processServerResponse(data, studentId, accessType);
+            }
         })
         .catch(error => {
             console.error('Erro na requisição:', error);
             alert('Erro ao registrar acesso: ' + error.message);
         });
     }
+    
 
     // Processa a resposta do servidor
     processServerResponse(data, studentId, accessType) {
@@ -94,11 +98,7 @@ class AccessControl {
             this.updateLog();
             this.updateStats();
             this.resetForm();
-
-            alert(data.mensagem);
-        } else {
-            alert(data.mensagem);
-        }
+        } 
     }
 
     // Atualiza a visualização do log de acessos
